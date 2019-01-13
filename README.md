@@ -2,11 +2,11 @@
 
 This repository contains the complete code from the [blog post Transfer Learning with Tensornets and Dataset API](http://tamaszilagyi.com/blog/2019/2019-01-12-tensornets/). The goal of this project is to tackle the the [2013 Facial Expression Recognition Challenge](https://www.kaggle.com/c/challenges-in-representation-learning-facial-expression-recognition-challenge/data) using transfer learning implemented with Tensorflow's high-level API's. 
 
-# Data
+## Data
 
 You can download the data from the above link, copy it to the `data/` folder and subsequently run `./datagen.sh` in your Terminal. This function divides the `fer2013.csv` file into `train` and `validation` sets.
 
-# Training the model on Google Cloud
+## Training the model on Google Cloud
 
 While it is possible to train this model locally, I did so on [Goolge's ML Engine](https://cloud.google.com/ml-engine/) with the `gcloud` command-line tool. Make sure you uplaod both .csv files to a Google Cloud Storage bucket first. The trainer program and its utility functions are located in the `./train/` folder. An example script is (to be run from the root of this directory) would look something like the following.
 
@@ -28,7 +28,7 @@ gcloud ml-engine jobs submit training 'jobname' --region europe-west1 \
                            --ckpt-out 'gs://path/to/save/model'
 ```
 
-# Inferece
+## Inferece
 
 When the job finishes, the checkpoint files are saved to the location you specified (`'gs://path/to/save/model'` above). After downloading the files, we need to freeze the weights and optimize the graph for inference. This can be done using the `trainer/freeze.py`. From the command-line:
 
