@@ -1,6 +1,6 @@
 # Transfer Learning with Tensornets and the Dataset API
 
-This repo contains the complete code from the [blog post Transfer Learning with Tensornets and Dataset API](http://tamaszilagyi.com/blog/2019/2019-01-12-tensornets/). The goal of this project is to tackle the the [2013 Facial Expression Recognition Challenge](https://www.kaggle.com/c/challenges-in-representation-learning-facial-expression-recognition-challenge/data) using transfer learning implemented with Tensorflow's high-level API's. 
+This repository contains the complete code from the [blog post Transfer Learning with Tensornets and Dataset API](http://tamaszilagyi.com/blog/2019/2019-01-12-tensornets/). The goal of this project is to tackle the the [2013 Facial Expression Recognition Challenge](https://www.kaggle.com/c/challenges-in-representation-learning-facial-expression-recognition-challenge/data) using transfer learning implemented with Tensorflow's high-level API's. 
 
 # Data
 
