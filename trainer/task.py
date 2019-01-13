@@ -86,7 +86,7 @@ if __name__ == "__main__":
       "--lr",
       help="Learning rate",
       type=float,
-      default=40
+      default=1e-5
   )
   parser.add_argument(
       "--train-batch-size",
