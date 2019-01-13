@@ -65,8 +65,8 @@ def run_model(hparams):
                  avg_acc += acc
              print("Average validation set accuracy over {} iterations is {:.2f}%".format(int(7178/hparams.train_batch_size),
              (avg_acc / int(7178/hparams.train_batch_size)) * 100))
-            #  save_path = saver.save(sess, hparams.ckpt_out + "{}.ckpt".format(epoch))
-            #  print("Model saved in path: %s" % save_path)
+             save_path = saver.save(sess, hparams.ckpt_out + "{}.ckpt".format(epoch))
+             print("Model saved in path: %s" % save_path)
 
 if __name__ == "__main__":
   parser = argparse.ArgumentParser()
