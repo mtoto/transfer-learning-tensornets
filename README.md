@@ -8,7 +8,7 @@ You can download the data from the above link, copy it to the `data/` folder and
 
 ## Training the model on Google Cloud
 
-While it is possible to train this model locally, I did so on [Goolge's ML Engine](https://cloud.google.com/ml-engine/) with the `gcloud` command-line tool. Make sure you uplaod both .csv files to a Google Cloud Storage bucket first. The trainer program and its utility functions are located in the `./train/` folder. An example script (to be run from the root of this directory) would look something like the following:
+While it is possible to train this model locally, I did so on [Goolge's ML Engine](https://cloud.google.com/ml-engine/) with the `gcloud` command-line tool. Make sure you upload both .csv files to a Google Cloud Storage bucket first. The trainer program and its utility functions are located in the `./train/` folder. An example script (to be run from the root of this directory) would look something like the following:
 
 ```bash
 gcloud ml-engine jobs submit training 'jobname' --region europe-west1 \
