@@ -23,7 +23,7 @@ def test_videocam(cascade_file, pb_file):
             detected_face = gray[int(y):int(y+h), int(x):int(x+w)]# crop detected face
             detected_face = cv2.resize(detected_face, (48, 48)) # resize to 48*48 first
             detected_face = cv2.resize(detected_face, (224, 224)) # resize to 224*224 
-            grayd = cv2.cvtColor(detected_face, cv2.COLOR_GRAY2BGR)
+            grayd = cv2.cvtColor(detected_face, cv2.COLOR_GRAY2RBG)
             im = np.expand_dims(grayd, axis=0)
 
             net.setInput(im.transpose(0, 3, 1, 2), name = "IteratorGetNext")

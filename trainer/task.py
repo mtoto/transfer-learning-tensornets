@@ -29,46 +29,49 @@ def run_model(hparams):
 
     is_train=tf.placeholder_with_default(False, shape=(), name="is_train")
     model=nets.DenseNet169(x, is_training=is_train, classes=7)
-    train_list=model.get_weights()[hparams.first_layer:]  # Only retrain last conv block
+    train_list=model.get_weights()[hparams.first_layer:]  # 520 = only retrain last conv block
     loss=tf.losses.softmax_cross_entropy(y, model)
 
-    update_ops = tf.get_collection(tf.GraphKeys.UPDATE_OPS)
+    update_ops=tf.get_collection(tf.GraphKeys.UPDATE_OPS)
     with tf.control_dependencies(update_ops):
-        train = tf.train.AdamOptimizer(learning_rate=hparams.lr).minimize(loss,var_list=train_list) # minimize(loss, var_list=train_list)
+        train=tf.train.AdamOptimizer(learning_rate=hparams.lr).minimize(loss,var_list=train_list) # minimize(loss, var_list=train_list)
     
-    correct_pred = tf.equal(tf.argmax(model, 1), tf.argmax(y, 1))
-    accuracy = tf.reduce_mean(tf.cast(correct_pred, tf.float32), name="accuracy")
-    
-    init_op = tf.global_variables_initializer()
-    config = tf.ConfigProto()
-    config.gpu_options.allow_growth = True
+    test_acc, test_acc_op=tf.metrics.accuracy(tf.argmax(y, 1),tf.argmax(model,1))
 
-    with tf.Session(config = config) as sess:
+    init_op=tf.global_variables_initializer()
+    local_init_op=tf.local_variables_initializer()
+
+    config=tf.ConfigProto()
+    config.gpu_options.allow_growth=True
+
+    with tf.Session(config=config) as sess:
         sess.run(init_op)
+        sess.run(local_init_op)
         sess.run(training_init_op)
         sess.run(model.pretrained())
 
-        saver = tf.train.Saver()
-        if hparams.load_ckpt == 1:
+        saver=tf.train.Saver()
+        if hparams.load_ckpt==1:
             saver.restore(sess, hparams.ckpt_in + ".ckpt")
 
         for epoch in range(hparams.num_epochs):
              for _ in range(int(28709/hparams.train_batch_size)):
                  sess.run(train, {is_train: True})
-             l = sess.run(loss, {is_train: True})
+             l=sess.run(loss, {is_train: True})
              print("Epoch: {}, loss: {:.3f}".format(epoch, l))
-             # re-initialize the iterator, but this time with validation data
+             
+            #  reinitialize iterator  with validation data
              sess.run(validation_init_op)
-             avg_acc = 0
-             for _ in range(int(7178/hparams.train_batch_size)):
-                 acc = sess.run(accuracy, {is_train: False})
-                 avg_acc += acc
-             print("Average validation set accuracy over {} iterations is {:.2f}%".format(int(7178/hparams.train_batch_size),
-             (avg_acc / int(7178/hparams.train_batch_size)) * 100))
-             save_path = saver.save(sess, hparams.ckpt_out + "{}.ckpt".format(epoch))
+             eval_iters=int(7178/hparams.train_batch_size)
+             for _ in range(eval_iters):
+                 sess.run(test_acc_op, {is_train: False})
+
+             print("Accumulated validation set accuracy over {} iterations is {:.2f}%".format(eval_iters,
+             sess.run(test_acc)*100))
+             save_path=saver.save(sess, hparams.ckpt_out + "{}.ckpt".format(epoch))
              print("Model saved in path: %s" % save_path)
 
-if __name__ == "__main__":
+if __name__=="__main__":
   parser = argparse.ArgumentParser()
   # Input Arguments
   parser.add_argument(
@@ -78,8 +81,7 @@ if __name__ == "__main__":
   )
   parser.add_argument(
       "--num-epochs",
-      help=
-      "Maximum number of training data epochs on which to train",
+      help="Maximum number of training data epochs on which to train",
       type=int
   )
   parser.add_argument(
