@@ -57,16 +57,13 @@ def run_model(hparams):
         for epoch in range(hparams.num_epochs):
              for _ in range(int(28709/hparams.train_batch_size)):
                  sess.run(train, {is_train: True})
-             l=sess.run(loss, {is_train: True})
-             print("Epoch: {}, loss: {:.3f}".format(epoch, l))
-             
             #  reinitialize iterator  with validation data
              sess.run(validation_init_op)
              eval_iters=int(7178/hparams.train_batch_size)
              for _ in range(eval_iters):
                  sess.run(test_acc_op, {is_train: False})
 
-             print("Accumulated validation set accuracy over {} iterations is {:.2f}%".format(eval_iters,
+             print("Accumulated validation accuracy at epoch {} iterations is {:.2f}%".format(epoch,
              sess.run(test_acc)*100))
              save_path=saver.save(sess, hparams.ckpt_out + "{}.ckpt".format(epoch))
              print("Model saved in path: %s" % save_path)
