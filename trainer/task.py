@@ -30,7 +30,7 @@ def run_model(hparams):
     is_train=tf.placeholder_with_default(False, shape=(), name="is_train")
     model=nets.DenseNet169(x, is_training=is_train, classes=7)
     train_list=model.get_weights()[hparams.first_layer:]  # 520 = only retrain last conv block
-    loss=tf.losses.softmax_cross_entropy(y, model)
+    loss=tf.losses.softmax_cross_entropy(y, model.logits)
 
     update_ops=tf.get_collection(tf.GraphKeys.UPDATE_OPS)
     with tf.control_dependencies(update_ops):
